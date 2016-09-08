@@ -10,7 +10,7 @@ var text_values = {
 var blocklyArea = document.getElementById('blocklyArea');
 var blocklyDiv = document.getElementById('blocklyDiv');
 var workspace = Blockly.inject(blocklyDiv,
-  {toolbox: document.getElementById('toolbox')});
+  {toolbox: document.getElementById('toolbox'), media: '../../media/'});
 var onresize = function(e) {
 // Compute the absolute coordinates and dimensions of blocklyArea.
 var element = blocklyArea;
@@ -210,15 +210,13 @@ function loadSave(encodedText) {
     var utf8 = atob(encodedText);
     var text = decode_utf8(utf8);
     var xml = Blockly.Xml.textToDom(text);
-    console.log(xml);
     workspace.clear();
-    Blockly.Xml.domToWorkspace(xml, workspace);
+    Blockly.Xml.domToWorkspace(workspace, xml);
   }
 }
 
 function createSave() {
   var xml = Blockly.Xml.workspaceToDom(workspace);
-  console.log(xml);
   var text = Blockly.Xml.domToText(xml);
   var utf8 = encode_utf8(text)
   return btoa(utf8);
