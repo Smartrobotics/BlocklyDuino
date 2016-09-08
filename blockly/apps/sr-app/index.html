@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>NAO楽プログラミング</title>
+
+	<script type="text/javascript" src="../../blockly_compressed.js"></script>
+  	<script type="text/javascript" src="../../blocks_compressed.js"></script>
+  	<script type="text/javascript" src="../../arduino_compressed.js"></script>
+	<script type="text/javascript" src="../../msg/js/ja.js"></script>
+	<script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
+	<!-- popUp -->
+	<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+	<!-- popUp -->
+	<script type="text/javascript" src="js/js.cookie.js"></script>
+	<link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+<header>
+	<!-- <img id="logoImg" src="img/logo.png" alt="Smart Robotics"> -->
+	<!-- <img id="titleImg" src="img/title.png" alt="NAO楽プログラミング"> -->
+	<img id="titleImg" src="img/title2.png" alt="ITマスターロボットプログラミング">
+</header>
+<section class="blocklyContent">
+	<div class="container">
+		<div id="blocklyArea">
+			<div id="blocklyDiv"></div>
+		</div>
+		<div id="jsCode" style="float: left; margin-left: 10px; display:none">
+			<h1>Code</h1>
+			<textarea id="textbox" style="width: 400px; height: 390px;"></textarea>
+		</div>
+		<div class="rightside">
+			<div id="buttons">
+				<button class="btn Start" id="generateCode" style="font-size: 25px;" onclick="uploadClick()">&#x25B6; 実行</button>
+				<button class="btn" id="stop" style="font-size: 25px;" onclick="resetClick()">X 停止</button>
+				<br>
+				<div class="loadAndSave">
+					<button class="btn" id="loadOnline" style="font-size: 25px;" onclick="popUp('#loadOnlineName')">読込</button>
+					<button class="btn" id="saveOnline" style="font-size: 25px;" onclick="saveOnline()">共有</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="popUp" id="popUp" title="共有したファイルのURL">
+		<div id="popUpText"></div>
+		<button class="btn pop" style="font-size: 25px;" onclick="hidePopUp('#popUp')">確認</button>
+	</div>
+	<div class="popUpError" id="popUpError" title="エラー">
+		<div id="popUpTextError"></div>
+		<button class="btn pop" style="font-size: 25px;" onclick="hidePopUp('#popUpError')">確認</button>
+	</div>
+
+	<div class="loadOnlineName" id="loadOnlineName" title="開くファイル名を入力してください">
+		<input type="text" name="loadOnlineNameURL" id="loadOnlineNameURL" size="20" maxlength="20">
+		<button class="btn pop" id="loadOnline" style="font-size: 25px;" onclick="onLoadButton()">開く</button>
+	</div>
+	<xml id="toolbox" style="display: none">
+    <category name="Logic">
+      <block type="controls_if"></block>
+      <block type="logic_compare"></block>
+      <block type="logic_operation"></block>
+      <block type="logic_negate"></block>
+      <block type="logic_null"></block>
+    </category>
+    <category name="Control">
+      <block type="base_delay">
+        <value name="DELAY_TIME">
+          <block type="math_number">
+            <field name="NUM">1000</field>
+          </block>
+        </value>
+      </block>
+      <block type="controls_for">
+        <value name="FROM">
+          <block type="math_number">
+            <field name="NUM">1</field>
+          </block>
+        </value>
+        <value name="TO">
+          <block type="math_number">
+            <field name="NUM">10</field>
+          </block>
+        </value>
+      </block>
+      <block type="controls_whileUntil"></block>
+    </category>
+    <category name="Math">
+      <block type="math_number"></block>
+      <block type="math_arithmetic"></block>
+      <block type="base_map">
+        <value name="DMAX">
+          <block type="math_number">
+            <field name="NUM">180</field>
+          </block>
+        </value>
+      </block>
+    </category>
+    <category name="Text">
+      <block type="text"></block>
+    </category>
+    <category name="Variables" custom="VARIABLE"></category>
+    <category name="Functions" custom="PROCEDURE"></category>
+    <sep></sep>
+    <category name="Input/Output">
+      <block type="inout_highlow"></block>
+      <block type="inout_digital_write"></block>
+      <block type="inout_digital_read"></block>
+      <block type="inout_analog_write">
+        <value name="NUM">
+          <block type="math_number">
+            <field name="NUM">0</field>
+          </block>
+        </value>
+      </block>
+      <block type="inout_analog_read"></block>
+      <block type="serial_print">
+        <value name="CONTENT">
+          <block type="text">
+            <field name="TEXT"></field>
+          </block>
+        </value>
+      </block>
+      <block type="inout_tone">
+        <value name="NUM">
+          <block type="math_number">
+            <field name="NUM">440</field>
+          </block>
+        </value>
+      </block>
+      <block type="inout_notone"></block>
+      <block type="inout_buildin_led"></block>
+    </category>
+    <category name="Servo">
+      <block type="servo_move">
+        <value name="DEGREE">
+          <block type="math_number">
+            <field name="NUM">0</field>
+          </block>
+        </value>
+      </block>
+      <block type="servo_read_degrees"></block>
+    </category>
+    <category name="Grove Analog">
+      <block type="grove_rotary_angle"></block>
+      <block type="grove_temporature_sensor"></block>
+      <block type="grove_sound_sensor"></block>
+      <block type="grove_thumb_joystick"></block>
+    </category>
+    <category name="Grove">
+      <block type="grove_led"></block>
+      <block type="grove_button"></block>
+      <block type="grove_relay"></block>
+      <block type="grove_tilt_switch"></block>
+      <block type="grove_piezo_buzzer"></block>
+      <block type="grove_pir_motion_sensor"></block>
+      <block type="grove_line_finder"></block>
+      <block type="grove_rgb_led"></block>
+      <block type="grove_ultrasonic_ranger"></block>
+    </category>
+    <category name="Grove LCD">
+      <block type="grove_serial_lcd_print">
+        <value name="TEXT">
+          <block type="text">
+            <field name="TEXT"></field>
+          </block>
+        </value>
+        <value name="TEXT2">
+          <block type="text">
+            <field name="TEXT"></field>
+          </block>
+        </value>
+        <value name="DELAY_TIME">
+          <block type="math_number">
+            <field name="NUM">1000</field>
+          </block>
+        </value>
+      </block>
+      <block type="grove_serial_lcd_power"></block>
+      <block type="grove_serial_lcd_effect"></block>
+    </category>
+    <category name="Grove Motor">
+      <block type="grove_motor_shield"></block>
+    </category>
+  </xml>
+</section>
+<script type="text/javascript" src="js/main.js"></script>
+</body>
+</html>
